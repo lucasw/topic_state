@@ -14,6 +14,7 @@ import rostopic
 from roslib.message import get_message_class
 from rospy.msg import AnyMsg
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Float32
 
 
 class TopicState(object):
@@ -21,15 +22,27 @@ class TopicState(object):
         # TODO(lucasw) support many topics in param list
         # for now just one
 
-        self.js = JointState()
-        self.js.name.append('topic')
-        self.js.position.append(0.0)
+        self.use_float = rospy.get_param("~use_float", True)
+        self.float = None
+        self.float_pub = None
+        if self.use_float:
+            self.float = 0.0
+            self.float_pub = rospy.Publisher('topic_state_float', Float32, queue_size=10)
+
+        self.use_joint_state = rospy.get_param("~use_joint_state", False)
+        self.js = None
+        self.js_pub = None
+
+        if self.use_joint_state:
+            self.js = JointState()
+            self.js.name.append('topic')
+            self.js.position.append(0.0)
+            self.js_pub = rospy.Publisher('topic_state', JointState, queue_size=10)
 
         # self.label = rospy.get_param("~label", "topic")
         self.pulse_period = rospy.get_param("~period", 0.02)
         self.edge_time = rospy.get_param("~edge_time", 0.002)
         self.end_pulse_timer = None
-        self.js_pub = rospy.Publisher('topic_state', JointState, queue_size=10)
         self.sub = rospy.Subscriber('topic', AnyMsg, self.callback, queue_size=4)
 
     def callback(self, msg):
@@ -53,12 +66,21 @@ class TopicState(object):
         self.end_pulse_timer = None
 
     def pub(self, value=0.0, stamp=None):
+        if self.use_joint_state:
+            self.pub_js(value, stamp)
+        if self.use_float:
+            self.pub_float(value)
+
+    def pub_js(self, value=0.0, stamp=None):
         self.js.header.stamp = stamp
         if stamp is None:
             self.js.header.stamp = rospy.Time.now()  # or event.cur_real
         self.js.position[0] = value
         self.js_pub.publish(self.js)
-        self.one_shot = None
+
+    def pub_float(self, value=0.0, stamp=None):
+        self.float = value
+        self.float_pub.publish(self.float)
 
 if __name__ == '__main__':
     rospy.init_node('topic_state')
