@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   ddynamic_reconfigure
   message_generation
   nodelet
+  roscpp
   # roslint
   rospy
   std_msgs
@@ -18,3 +19,12 @@ catkin_package(
   CATKIN_DEPENDS ddynamic_reconfigure
 )
 
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+add_executable(float_stats src/float_stats.cpp)
+target_link_libraries(float_stats
+  ${catkin_LIBRARIES}
+)
+
+# TODO(lucasw) install
