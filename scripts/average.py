@@ -53,6 +53,7 @@ class TopicState(object):
         self.dev_pub.publish(Float32(stddev))
         # print('{} {}'.format(average, stddev))
 
+
 if __name__ == '__main__':
     rospy.init_node('topic_state')
     topic_state = TopicState()

@@ -82,6 +82,7 @@ class TopicState(object):
         self.float = value
         self.float_pub.publish(self.float)
 
+
 if __name__ == '__main__':
     rospy.init_node('topic_state')
     topic_state = TopicState()

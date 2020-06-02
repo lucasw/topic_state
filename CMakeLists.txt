@@ -6,11 +6,20 @@ find_package(catkin REQUIRED COMPONENTS
   ddynamic_reconfigure
   message_generation
   nodelet
+  roslib
   roscpp
-  # roslint
+  roslint
   rospy
+  sensor_msgs
   std_msgs
 )
+
+set(
+  ROSLINT_CPP_OPTS
+  "--extensions=cpp,h,hpp" "--filter=-whitespace/braces"
+)
+roslint_cpp()
+roslint_python()
 
 # catkin_python_setup()
 

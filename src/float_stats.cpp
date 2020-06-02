@@ -6,9 +6,12 @@
 #include <ddynamic_reconfigure/ddynamic_reconfigure.h>
 #include <deque>
 #include <map>
+#include <memory>
 #include <numeric>
 #include <ros/ros.h>
 #include <std_msgs/Float32.h>
+#include <string>
+#include <vector>
 
 // https://stackoverflow.com/questions/49992249/how-to-calculate-the-sample-mean-standard-deviation-and-variance-in-c-from-r
 template<typename T>

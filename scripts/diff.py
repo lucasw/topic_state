@@ -23,6 +23,7 @@ class TopicState(object):
             self.diff_pub.publish(Float32(diff))
         self.last_msg = msg
 
+
 if __name__ == '__main__':
     rospy.init_node('topic_diff')
     topic_state = TopicState()
