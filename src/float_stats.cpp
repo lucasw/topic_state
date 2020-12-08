@@ -51,7 +51,7 @@ public:
 
     ddr_ = std::make_unique<ddynamic_reconfigure::DDynamicReconfigure>();
     ddr_->registerVariable<int>("window", &num_bins_, "number of samples to keep", 1, 8000);
-    ddr_->registerVariable<bool>("enable_histogram", &enable_histogram_, "Output a histogram");
+    ddr_->registerVariable<bool>("enable_histogram", &enable_histogram_, "Output a histogram", false, true);
     ddr_->registerVariable<int>("num_bins", &window_, "number of histogram bins", 1, 200);
     ddr_->registerVariable<double>("bin_width", &bin_width_, "bin width", 0.000001, 100.0);
     ddr_->publishServicesTopics();
