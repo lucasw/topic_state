@@ -1,4 +1,4 @@
-name: ROS CI
+name: ROS CI Ubuntu 20.04 Noetic
 
 on: [push]
 
