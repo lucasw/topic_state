@@ -23,9 +23,11 @@ roslint_cpp()
 # https://answers.ros.org/question/335608/roslint-python-errors-to-stdout/
 set(ROSLINT_PYTHON_OPTS "1>&2")
 # Don't see any results from these
+# set(ROSLINT_PYTHON_OPTS "--show-source" "--show-pep8")
 # set(ROSLINT_PYTHON_OPTS "--show-source")
 # set(ROSLINT_PYTHON_OPTS "--show-pep8")
 # set(ROSLINT_PYTHON_OPTS "--verbose")
+# set(ROSLINT_PYTHON_OPTS "--count")
 roslint_python()
 
 # catkin_python_setup()

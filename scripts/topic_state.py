@@ -16,7 +16,6 @@ from rospy.msg import AnyMsg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32
 
-
 class TopicState(object):
     def __init__(self):
         # TODO(lucasw) support many topics in param list
