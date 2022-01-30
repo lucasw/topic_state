@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.0.2)
 project(topic_state)
 
 find_package(catkin REQUIRED COMPONENTS
-  dynamic_reconfigure
   ddynamic_reconfigure
+  dynamic_reconfigure
   message_generation
   nodelet
-  roslib
   roscpp
+  roslib
   roslint
   rospy
   sensor_msgs
@@ -34,7 +34,13 @@ roslint_python()
 
 catkin_package(
   # INCLUDE_DIRS include
-  CATKIN_DEPENDS ddynamic_reconfigure
+  CATKIN_DEPENDS
+  ddynamic_reconfigure
+  dynamic_reconfigure
+  nodelet
+  roscpp
+  sensor_msgs
+  std_msgs
 )
 
 include_directories(
