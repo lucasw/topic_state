@@ -12,7 +12,7 @@ from roslib.message import get_message_class
 
 
 class MultiEcho(object):
-    def __init__(self):
+    def __init__(self, topics):
         # TODO(lucasw) support many topics in param list
         # for now just one
 
@@ -21,8 +21,8 @@ class MultiEcho(object):
         self.topics = {}
         self.topic_types = {}
         self.subs = {}
-        for index in range(2):
-            self.topics[index] = rospy.get_param(f"~t{index}")
+        for index in range(len(topics)):
+            self.topics[index] = topics[index]
             self.subs[index] = rospy.Subscriber(self.topics[index], rospy.AnyMsg,
                                                 self.init_callback,
                                                 callback_args=(index),
@@ -51,6 +51,5 @@ class MultiEcho(object):
 
 if __name__ == '__main__':
     rospy.init_node('multi_echo')
-    print(sys.argv)
-    node = MultiEcho()
+    node = MultiEcho(sys.argv[1:])
     rospy.spin()
