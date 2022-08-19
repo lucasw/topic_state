@@ -69,7 +69,10 @@ class MultiEcho(object):
         rospy.loginfo(f"{index} {self.topics[index]} {self.topic_types[index]}\n{msg_str}")
 
     def sync_callback(self, *msgs):
-        rospy.loginfo(f"\n\n----------------------------- sync callback ({len(msgs)}) -----------------------")
+        text = f"\n\n----------------------------- sync callback ({len(msgs)}) -----------------------"
+        stamp = rospy.Time.now()
+        text += f"\nage {(stamp - msgs[0].header.stamp).to_sec():0.3f}s"
+        rospy.loginfo(text)
         for ind, msg in enumerate(msgs):
             self.callback(msg, ind)
 
