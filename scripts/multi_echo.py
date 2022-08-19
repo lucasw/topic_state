@@ -6,7 +6,9 @@
 # Also add exact and approximate time sync options
 
 import sys
+from threading import Lock
 
+import message_filters
 import rospy
 from roslib.message import get_message_class
 
@@ -16,10 +18,15 @@ class MultiEcho(object):
         # TODO(lucasw) support many topics in param list
         # for now just one
 
-        self.max_len = rospy.get_param("~max_len", 200)
+        self.lock = Lock()
 
+        self.max_len = rospy.get_param("~max_len", 250)
+        self.use_sync = rospy.get_param("~use_sync", True)
+
+        self.sync_sub = None
         self.topics = {}
         self.topic_types = {}
+        self.classes = {}
         self.subs = {}
         for index in range(len(topics)):
             self.topics[index] = topics[index]
@@ -35,11 +42,24 @@ class MultiEcho(object):
         self.subs[index].unregister()
 
         topic_class = get_message_class(topic_type)
-        rospy.loginfo(f"{index} subscribing to {topic_type} {topic_class}")
-        self.subs[index] = rospy.Subscriber(self.topics[index], topic_class,
-                                            self.callback,
-                                            callback_args=(index),
-                                            queue_size=10)
+        rospy.loginfo(f"{index} found class for '{topic_type}': {topic_class}")
+        if self.use_sync:
+            self.classes[index] = topic_class
+        else:
+            self.subs[index] = rospy.Subscriber(self.topics[index], topic_class,
+                                                self.callback,
+                                                callback_args=(index),
+                                                queue_size=10)
+
+        with self.lock:
+            if self.sync_sub is None and len(self.classes.keys()) == len(self.subs.keys()):
+                rospy.loginfo(f"now setting up sync subscriber {self.topics.values()}")
+                subs = {}
+                for key in self.classes.keys():
+                    subs[key] = message_filters.Subscriber(self.topics[key], self.classes[key])
+
+                self.sync_sub = message_filters.TimeSynchronizer(subs.values(), queue_size=100)
+                self.sync_sub.registerCallback(self.sync_callback)
 
     def callback(self, msg, args):
         index = args
@@ -47,6 +67,11 @@ class MultiEcho(object):
         if len(msg_str) > self.max_len:
             msg_str = f"{msg_str[:self.max_len]}..."
         rospy.loginfo(f"{index} {self.topics[index]} {self.topic_types[index]}\n{msg_str}")
+
+    def sync_callback(self, *msgs):
+        rospy.loginfo(f"\n\n----------------------------- sync callback ({len(msgs)}) -----------------------")
+        for ind, msg in enumerate(msgs):
+            self.callback(msg, ind)
 
 
 if __name__ == '__main__':
