@@ -37,6 +37,7 @@ class MultiEcho(object):
 
     def init_callback(self, msg, args):
         index = args  # args[0]
+
         topic_type = msg._connection_header['type']
         self.topic_types[index] = topic_type
         self.subs[index].unregister()
@@ -79,5 +80,6 @@ class MultiEcho(object):
 
 if __name__ == '__main__':
     rospy.init_node('multi_echo')
-    node = MultiEcho(sys.argv[1:])
+    topics = [arg for arg in sys.argv[1:] if not arg.startswith("_")]
+    node = MultiEcho(topics)
     rospy.spin()
