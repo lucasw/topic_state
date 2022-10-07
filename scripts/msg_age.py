@@ -64,6 +64,9 @@ class MsgAge(object):
         text = "ages:"
         with self.lock:
             for index, ages in self.ages.items():
+                if len(self.topics) <= index or len(self.topic_types) <= index:
+                    rospy.logwarn("{index} {self.topics} {self.topic_types}")
+                    return
                 if len(ages) == 0:
                     age_str = "no messages"
                 else:
