@@ -3,7 +3,6 @@
 #
 # subscribe to multiple topics with headers and average their age with
 
-import datetime
 import sys
 from threading import Lock
 
@@ -21,14 +20,8 @@ class MsgAge(object):
             topics.append(arg)
 
         rospy.loginfo(f"getting age of topics: {topics}")
-        self.verbose = rospy.get_param("~verbose", False)
 
         self.lock = Lock()
-
-        self.LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
-        rospy.loginfo(self.LOCAL_TIMEZONE)
-        utc_dt = datetime.datetime.now(datetime.timezone.utc)
-        print("Local time {}".format(utc_dt.astimezone()))
 
         self.sync_sub = None
         self.topics = {}
@@ -63,11 +56,6 @@ class MsgAge(object):
 
     def callback(self, msg, args):
         cur = rospy.Time.now()
-        if self.verbose:
-            cur_date = datetime.datetime.fromtimestamp(cur.to_sec())
-            msg_date = datetime.datetime.fromtimestamp(msg.header.stamp.to_sec())
-            # TODO(lucasw) how long is it from calling this to characters appearing on screen?
-            print(f"{cur_date} | {msg_date} | {(cur - msg.header.stamp).to_sec():0.06f}s", flush=True)
         index = args
         with self.lock:
             self.ages[index].append((cur - msg.header.stamp).to_sec())
