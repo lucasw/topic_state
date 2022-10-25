@@ -76,6 +76,8 @@ class MsgAge(object):
         text = "ages:"
         with self.lock:
             for index, ages in self.ages.items():
+                if index not in self.topic_types.keys():
+                    continue
                 if len(self.topics) <= index or len(self.topic_types) <= index:
                     rospy.logwarn(f"{index} {self.topics} {self.topic_types}")
                     return
