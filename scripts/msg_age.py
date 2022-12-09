@@ -45,6 +45,7 @@ class MsgAge(object):
             self.ages[index] = []
 
         period = rospy.get_param("~period", 1.0)
+
         self.timer = rospy.Timer(rospy.Duration(period), self.update)
 
     def init_callback(self, msg, args):
@@ -69,8 +70,12 @@ class MsgAge(object):
             # TODO(lucasw) how long is it from calling this to characters appearing on screen?
             print(f"{cur_date} | {msg_date} | {(cur - msg.header.stamp).to_sec():0.06f}s", flush=True)
         index = args
+        age = cur - msg.header.stamp
+        # TODO(lucasw) do something if age is negative?  Want to avoid looping bags messing these up
+        if age < rospy.Duration(-5.0):
+            return
         with self.lock:
-            self.ages[index].append((cur - msg.header.stamp).to_sec())
+            self.ages[index].append(age.to_sec())
 
     def update(self, event):
         text = "ages:"
