@@ -9,9 +9,7 @@
 # in rviz.
 
 import rospy
-import rostopic
 
-from roslib.message import get_message_class
 from rospy.msg import AnyMsg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32
