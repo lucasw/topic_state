@@ -10,6 +10,7 @@ import sys
 import rospy
 from rospy.impl.rosout import _rospy_to_logging_levels
 from rosgraph_msgs.msg import Log
+# TODO(lucasw) https://github.com/lucasw/ros_comm/blob/salsa_noetic_aggregated has format_msg()
 from rosgraph.roslogging import (
     _color_reset,
     format_msg,
