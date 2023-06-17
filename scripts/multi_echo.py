@@ -59,7 +59,7 @@ class MultiEcho(object):
                 for key in self.classes.keys():
                     subs[key] = message_filters.Subscriber(self.topics[key], self.classes[key])
 
-                self.sync_sub = message_filters.TimeSynchronizer(subs.values(), queue_size=100)
+                self.sync_sub = message_filters.TimeSynchronizer(subs.values(), queue_size=200)
                 self.sync_sub.registerCallback(self.sync_callback)
 
     def callback(self, msg, args):
