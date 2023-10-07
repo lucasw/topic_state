@@ -51,4 +51,14 @@ target_link_libraries(float_stats
   ${catkin_LIBRARIES}
 )
 
-# TODO(lucasw) install
+install(PROGRAMS
+  scripts/average.py
+  scripts/diff.py
+  scripts/header_stamp_to_date.py
+  scripts/msg_age.py
+  scripts/multi_echo.py
+  scripts/ros_tui.py
+  scripts/rosout_to_stdout.py
+  scripts/topic_state.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
