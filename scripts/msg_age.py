@@ -73,6 +73,8 @@ class MsgAge(object):
         age = cur - msg.header.stamp
         # TODO(lucasw) do something if age is negative?  Want to avoid looping bags messing these up
         if age < rospy.Duration(-5.0):
+            text = f"negative message age {age.to_sec():0.3f}s, {cur.to_sec():0.3f}s {msg.header.stamp.to_sec():0.3f}s"
+            rospy.logwarn_throttle(1.0, text)
             return
         with self.lock:
             self.ages[index].append(age.to_sec())
