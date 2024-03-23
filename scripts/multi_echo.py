@@ -22,6 +22,8 @@ class MultiEcho(object):
 
         self.max_len = rospy.get_param("~max_len", 250)
         self.use_sync = rospy.get_param("~use_sync", True)
+        # set to 0.0 to do exact time sync
+        self.approx_slop = rospy.get_param("~approx_slop", 0.0)
 
         self.sync_sub = None
         self.topics = {}
@@ -59,7 +61,13 @@ class MultiEcho(object):
                 for key in self.classes.keys():
                     subs[key] = message_filters.Subscriber(self.topics[key], self.classes[key])
 
-                self.sync_sub = message_filters.TimeSynchronizer(subs.values(), queue_size=200)
+                if self.approx_slop <= 0.0:
+                    rospy.loginfo("exact time sync")
+                    self.sync_sub = message_filters.TimeSynchronizer(subs.values(), queue_size=200)
+                else:
+                    rospy.loginfo(f"approx time sync, slop: {self.approx_slop}s")
+                    self.sync_sub = message_filters.ApproximateTimeSynchronizer(subs.values(), queue_size=200,
+                                                                                slop=self.approx_slop)
                 self.sync_sub.registerCallback(self.sync_callback)
 
     def callback(self, msg, args):
