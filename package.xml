@@ -24,6 +24,7 @@
   <run_depend>ddynamic_reconfigure</run_depend>
   <run_depend>message_runtime</run_depend>
   <run_depend>nodelet</run_depend>
+  <run_depend>rosbag</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>roslib</run_depend>
   <run_depend>roslint</run_depend>

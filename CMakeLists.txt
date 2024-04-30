@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   message_generation
   nodelet
+  rosbag
   roscpp
   roslib
   roslint
@@ -53,6 +54,7 @@ target_link_libraries(float_stats
 
 install(PROGRAMS
   scripts/average.py
+  scripts/bag_msg_age.py
   scripts/diff.py
   scripts/header_stamp_to_date.py
   scripts/msg_age.py
