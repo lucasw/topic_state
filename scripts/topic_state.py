@@ -8,8 +8,9 @@
 # up to an abstract RobotModel and then the reception of messages can be visualized
 # in rviz.
 
-import rospy
+# import pprint
 
+import rospy
 from rospy.msg import AnyMsg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float32
@@ -45,6 +46,9 @@ class TopicState(object):
 
     def callback(self, msg):
         # TODO(lucasw) if there is a header use that timestamp optionally
+        # rospy.loginfo_once(dir(msg))
+        # rospy.loginfo_once(pprint.pformat(msg._connection_header))
+        rospy.loginfo_once(repr(msg._connection_header["message_definition"]))
         self.start_pulse()
 
     def start_pulse(self, event=None):
