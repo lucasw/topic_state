@@ -55,6 +55,7 @@ target_link_libraries(float_stats
 install(PROGRAMS
   scripts/average.py
   scripts/bag_msg_age.py
+  scripts/connection_header.py
   scripts/diff.py
   scripts/header_stamp_to_date.py
   scripts/msg_age.py
